@@ -18,7 +18,7 @@
       </div>
       <div id="unity-warning"> </div>
       <div id="unity-footer">
-        <div id="unity-logo-title-footer"><img src="TemplateData/mw-logo-title-footer.png" height="38" /></div>
+        <div id="unity-logo-title-footer"><a href="//www.martinwolf.info"><img src="TemplateData/mw-logo-title-footer.png" height="38" /></a></div>
         <div id="unity-fullscreen-button"><img src="TemplateData/fullscreen.png" height="38" /></div>
         <div id="unity-build-title">Cargo Ship Physics</div>
       </div>
@@ -116,6 +116,18 @@
         createUnityInstance(canvas, config, (progress) => {
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
               }).then((unityInstance) => {
+                const urlParams = new URLSearchParams(window.location.search);
+
+                const scene = urlParams.get('scene');
+                const autoStart = urlParams.get('start');
+
+                if (scene) {
+                  unityInstance.SendMessage('SceneLoader', 'AutoSelectScene', scene);
+                }
+                if (autoStart === '1' || autoStart === 'true') {
+                  unityInstance.SendMessage('SceneLoader', 'AutoStartScene', '');
+                }
+                
                 document.querySelector("#unity-loading-bar").style.display = "none";
                 document.querySelector("#unity-fullscreen-button").onclick = () => {
                   unityInstance.SetFullscreen(1);
